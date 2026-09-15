@@ -254,6 +254,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .metric-grid strong { display: block; font-size: 30px; font-weight: 700; color: var(--ink); letter-spacing: 0; }
 .metric-grid span { display: block; color: var(--muted); font-size: 12px; margin-top: 8px; }
 .project-gallery { display: grid; grid-template-columns: 1fr; gap: 32px; margin: 0 0 100px; }
+.project-gallery--paired { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .project-gallery figure { margin: 0; }
 .project-gallery img,
 .project-gallery video { width: 100%; height: auto; max-height: 640px; object-fit: contain; border-radius: 18px; border: 1px solid var(--line-soft); background: var(--bg-soft); display: block; box-shadow: var(--shadow); }

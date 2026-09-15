@@ -54,7 +54,7 @@ export function ProjectPage() {
         </section>
 
         {project.gallery && (
-          <section className="project-gallery">
+          <section className={`project-gallery${project.slug === 'structured-light-scanning' ? ' project-gallery--paired' : ''}`}>
             {project.gallery.map((item) => (
               <figure key={item.src}>
                 {item.type === 'video' ? (
