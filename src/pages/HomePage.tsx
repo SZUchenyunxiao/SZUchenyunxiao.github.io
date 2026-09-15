@@ -76,8 +76,7 @@ export function HomePage() {
         <section className="work-section container" id="work">
           <SectionHeading
             eyebrow="Selected work"
-            title="Projects with visible geometry, not just repository names."
-            description="每个项目先展示问题与结果，再给技术面试官展开算法、Pipeline 与实现细节。"
+            title="Selected 3D Reconstruction Projects"
           />
           <div className="projects-grid">
             {featuredProjects.map((project) => <ProjectCard project={project} key={project.slug} />)}

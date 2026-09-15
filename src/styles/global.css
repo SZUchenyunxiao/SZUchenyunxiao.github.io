@@ -23,6 +23,7 @@
   --shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.1);
   --max: 1240px;
+  --body-copy-size: clamp(17px, 1.4vw, 18px);
 }
 
 * { box-sizing: border-box; }
@@ -139,7 +140,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .section-heading { display: grid; grid-template-columns: 180px 1fr; gap: 40px; align-items: start; margin-bottom: 56px; }
 .eyebrow { color: var(--accent); text-transform: none; font-size: 15px; font-weight: 700; letter-spacing: 0; padding-top: 10px; }
 .section-heading h2 { font-size: clamp(30px, 3.6vw, 46px); max-width: 820px; letter-spacing: 0; line-height: 1.15; margin: 0; font-weight: 700; color: var(--ink); }
-.section-heading p { color: var(--muted); max-width: 620px; line-height: 1.6; margin: 18px 0 0; font-size: 16px; }
+.section-heading p { color: var(--muted); max-width: 620px; line-height: 1.6; margin: 18px 0 0; font-size: var(--body-copy-size); }
 .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
 .project-card {
   border: 1px solid var(--line-soft); border-radius: 22px; overflow: hidden;
@@ -152,8 +153,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .project-body { padding: 32px; }
 .project-card-topline { display: flex; justify-content: space-between; color: var(--muted); font-size: 12px; margin-bottom: 20px; }
 .project-card h3 { font-size: 25px; letter-spacing: 0; margin: 0; font-weight: 700; color: var(--ink); }
-.project-subtitle { color: var(--accent); font-size: 14px; margin: 8px 0 0; }
-.project-summary { color: var(--muted); line-height: 1.6; min-height: 76px; font-size: 15px; margin: 16px 0 0; }
+.project-subtitle { color: var(--accent); font-size: 17px; margin: 8px 0 0; }
+.project-summary { color: var(--muted); line-height: 1.65; min-height: 76px; font-size: var(--body-copy-size); margin: 16px 0 0; }
 .metric-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 24px 0 20px; }
 .metric { border-left: 2px solid var(--accent); padding-left: 14px; }
 .metric strong { display: block; font-size: 19px; font-weight: 700; color: var(--ink); }
@@ -180,7 +181,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .timeline-period { color: var(--muted); font-size: 15px; font-weight: 500; white-space: nowrap; }
 .timeline-summary { margin: 0 0 22px; color: var(--ink); font-size: 18px; line-height: 1.6; font-weight: 500; max-width: 820px; }
 .timeline-points { margin: 0; padding: 0; list-style: none; }
-.timeline-points li { position: relative; padding-left: 26px; line-height: 1.7; font-size: 16px; color: var(--soft); }
+.timeline-points li { position: relative; padding-left: 26px; line-height: 1.7; font-size: var(--body-copy-size); color: var(--soft); }
 .timeline-points li::before {
   content: ''; position: absolute; left: 6px; top: 11px;
   width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
@@ -194,12 +195,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .research-item { display: grid; grid-template-columns: 64px 1fr; gap: 28px; padding: 36px 0; border-bottom: 1px solid var(--line); }
 .research-item > span { color: var(--accent); font-size: 18px; font-weight: 700; }
 .research-item h3 { margin: 0 0 10px; font-size: 24px; line-height: 1.35; font-weight: 700; letter-spacing: -0.01em; color: var(--ink); }
-.research-item p { margin: 0; color: var(--soft); font-size: 16px; line-height: 1.5; }
+.research-item p { margin: 0; color: var(--soft); font-size: var(--body-copy-size); line-height: 1.55; }
 .research-item p strong { color: var(--accent); font-weight: 700; }
 .honor-list { margin-top: 56px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px 48px; }
 .honor-item { display: grid; grid-template-columns: 20px 1fr; gap: 12px; align-items: start; }
 .honor-item span { color: var(--accent); font-size: 15px; line-height: 1.55; }
-.honor-item p { margin: 0; color: var(--soft); font-size: 15px; line-height: 1.55; }
+.honor-item p { margin: 0; color: var(--soft); font-size: var(--body-copy-size); line-height: 1.6; }
 .honor-item p strong { color: var(--ink); font-weight: 700; }
 
 /* ---------- About ---------- */
@@ -208,12 +209,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .about-lead { margin: 0; font-size: 20px; line-height: 1.7; letter-spacing: 0; color: var(--soft); font-weight: 400; }
 .capabilities > div { display: grid; grid-template-columns: 40px 1fr; gap: 20px; padding: 24px 0; border-bottom: 1px solid var(--line-soft); }
 .capabilities span { color: var(--muted); font-size: 13px; }
-.capabilities p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.6; }
+.capabilities p { margin: 0; color: var(--muted); font-size: var(--body-copy-size); line-height: 1.65; }
 .capabilities strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 16px; font-weight: 700; }
 .education-block { margin-top: 64px; border-top: 1px solid var(--line); }
 .education-item { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; padding: 28px 0; border-bottom: 1px solid var(--line-soft); flex-wrap: wrap; }
 .education-main h3 { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: 0; color: var(--ink); }
-.education-main p { margin: 6px 0 0; color: var(--muted); font-size: 15px; }
+.education-main p { margin: 6px 0 0; color: var(--muted); font-size: var(--body-copy-size); }
 .education-focus { max-width: 620px; line-height: 1.5; }
 .education-period { color: var(--muted); font-size: 14px; white-space: nowrap; }
 
@@ -222,7 +223,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
 .skill-item { background: var(--panel); border: 1px solid var(--line-soft); border-radius: 18px; padding: 26px 28px; box-shadow: var(--shadow); }
 .skill-item strong { display: block; font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 10px; }
-.skill-item p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.6; }
+.skill-item p { margin: 0; color: var(--muted); font-size: var(--body-copy-size); line-height: 1.65; }
 
 /* ---------- Contact ---------- */
 .contact-section { padding: 120px 0; display: flex; align-items: end; justify-content: space-between; gap: 30px; }
@@ -258,21 +259,21 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .project-gallery figure { margin: 0; }
 .project-gallery img,
 .project-gallery video { width: 100%; height: auto; max-height: 640px; object-fit: contain; border-radius: 18px; border: 1px solid var(--line-soft); background: var(--bg-soft); display: block; box-shadow: var(--shadow); }
-.project-gallery figcaption { margin-top: 12px; color: var(--muted); font-size: 13px; text-align: center; }
+.project-gallery figcaption { margin-top: 12px; color: var(--muted); font-size: 16px; text-align: center; }
 
 .spec-section { margin: 0 0 100px; }
 .spec-title { font-size: clamp(22px, 2.6vw, 30px); font-weight: 700; letter-spacing: 0; margin: 0 0 28px; color: var(--ink); }
 .spec-table { border-top: 1px solid var(--line); }
 .spec-row { display: grid; grid-template-columns: 220px 1fr; gap: 24px; padding: 18px 0; border-bottom: 1px solid var(--line-soft); }
-.spec-label { color: var(--muted); font-size: 14px; font-weight: 600; }
-.spec-value { color: var(--soft); font-size: 15px; line-height: 1.55; }
+.spec-label { color: var(--muted); font-size: 16px; font-weight: 600; }
+.spec-value { color: var(--soft); font-size: var(--body-copy-size); line-height: 1.6; }
 
 .project-detail-grid { display: grid; grid-template-columns: 260px 1fr; gap: 0 50px; border-top: 1px solid var(--line); }
 .detail-title, .detail-copy { padding: 44px 0; border-bottom: 1px solid var(--line-soft); }
 .detail-title { display: flex; gap: 24px; align-items: baseline; }
 .detail-title span { color: var(--muted); font-size: 12px; }
 .detail-title h2 { margin: 0; font-size: 20px; font-weight: 700; color: var(--ink); }
-.detail-copy { color: var(--soft); line-height: 1.75; font-size: 16px; }
+.detail-copy { color: var(--soft); line-height: 1.75; font-size: var(--body-copy-size); }
 .detail-copy ul { margin: 0; padding-left: 20px; }
 .detail-copy li + li { margin-top: 12px; }
 .pipeline { display: flex; flex-wrap: wrap; gap: 10px; }
