@@ -45,6 +45,45 @@ export async function handleCollect(request: Request, env: Env): Promise<Respons
   const payload = sanitizePayload(raw)
   if (!payload) return json({ error: 'invalid payload' }, 400, env)
 
+  const inserted = await persistEvent(request, env, payload, ip)
+  if (!inserted) return json({ ok: true, deduped: true }, 200, env)
+  return json({ ok: true }, 200, env)
+}
+
+export async function handlePixelCollect(request: Request, env: Env): Promise<Response> {
+  const referrer = request.headers.get('Referer') ?? ''
+  let referrerOrigin = ''
+  try {
+    referrerOrigin = new URL(referrer).origin
+  } catch {
+    // A fallback pixel without a portfolio referrer is not accepted.
+  }
+  if (!env.ALLOWED_ORIGIN || referrerOrigin !== env.ALLOWED_ORIGIN) {
+    return pixelResponse(403)
+  }
+
+  const url = new URL(request.url)
+  if (url.href.length > 4096) return pixelResponse(414)
+  const ip = getClientIP(request)
+  if (!(await checkRateLimit(env, ip))) return pixelResponse(429)
+
+  const raw = Object.fromEntries(url.searchParams.entries()) as Record<string, unknown>
+  if (raw.ts !== undefined) raw.ts = Number(raw.ts)
+  if (raw.foregroundMs !== undefined) raw.foregroundMs = Number(raw.foregroundMs)
+  const payload = sanitizePayload(raw)
+  if (!payload) return pixelResponse(400)
+
+  await persistEvent(request, env, payload, ip)
+  return pixelResponse(200)
+}
+
+async function persistEvent(
+  request: Request,
+  env: Env,
+  payload: CollectPayload,
+  ip: string,
+): Promise<boolean> {
+
   const now = Date.now()
   const excluded = await isVisitorExcluded(env, payload.visitorId, ip)
   const referrer = trimText(payload.referrer, 1024) || null
@@ -66,10 +105,25 @@ export async function handleCollect(request: Request, env: Env): Promise<Respons
   })
 
   const inserted = await insertEvent(env, payload, now)
-  if (!inserted) return json({ ok: true, deduped: true }, 200, env)
+  if (!inserted) return false
 
   await updateSessionSummary(env, payload, now)
-  return json({ ok: true }, 200, env)
+  return true
+}
+
+function pixelResponse(status: number): Response {
+  const pixel = Uint8Array.from(
+    atob('R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=='),
+    (character) => character.charCodeAt(0),
+  )
+  return new Response(pixel, {
+    status,
+    headers: {
+      'Content-Type': 'image/gif',
+      'Cache-Control': 'no-store, max-age=0',
+      'X-Content-Type-Options': 'nosniff',
+    },
+  })
 }
 
 function sanitizePayload(value: unknown): CollectPayload | null {

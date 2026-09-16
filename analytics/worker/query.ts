@@ -55,6 +55,7 @@ export async function handleAdminQuery(request: Request, env: Env, url: URL): Pr
 
 interface SessionRow {
   session_id: string
+  visitor_id: string
   started_at: number
   ip: string | null
   referrer_type: string | null
@@ -79,7 +80,7 @@ async function listSessions(env: Env, query: { from: number; to: number; page: n
       .bind(query.from, query.to)
       .first<{ total: number }>(),
     env.DB.prepare(
-      `SELECT session_id, started_at, ip, referrer_type, device_type, browser, os, country,
+      `SELECT session_id, visitor_id, started_at, ip, referrer_type, device_type, browser, os, country,
               page_view_count, total_foreground_ms, clicked_resume, clicked_contact
        FROM sessions
        WHERE started_at BETWEEN ? AND ? AND is_excluded = 0
@@ -93,6 +94,7 @@ async function listSessions(env: Env, query: { from: number; to: number; page: n
   return {
     items: rows.results.map((row) => ({
       sessionId: row.session_id,
+      visitorId: row.visitor_id,
       startedAt: row.started_at,
       ip: row.ip,
       referrerType: row.referrer_type ?? 'unknown',

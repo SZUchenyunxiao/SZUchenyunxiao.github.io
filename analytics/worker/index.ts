@@ -1,5 +1,5 @@
 import type { Env } from './types'
-import { handleCollect } from './collect'
+import { handleCollect, handlePixelCollect } from './collect'
 import { handleLogin, handleLogout, requireAdmin } from './auth'
 import { handleAdminQuery } from './query'
 
@@ -15,6 +15,10 @@ export default {
     try {
       if (pathname === '/api/collect' && request.method === 'POST') {
         return await handleCollect(request, env)
+      }
+
+      if (pathname === '/api/pixel.gif' && request.method === 'GET') {
+        return await handlePixelCollect(request, env)
       }
 
       if (pathname === '/api/admin/login' && request.method === 'POST') {

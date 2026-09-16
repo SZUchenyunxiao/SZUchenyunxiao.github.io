@@ -114,12 +114,15 @@
 
       <!-- 3. 访问明细 -->
       <section class="table-section">
-        <h2>访问明细</h2>
+        <div class="section-heading-row">
+          <h2>访问明细</h2>
+          <p>匿名访客编号用于区分浏览器；出口 IP 可能被代理、VPN 或共享网络复用。</p>
+        </div>
         <div class="table-shell">
           <table id="session-table">
             <thead>
               <tr>
-                <th>开始时间</th><th>出口 IP</th><th>国家/地区</th><th>来源</th><th>设备/浏览器</th>
+                <th>开始时间</th><th>匿名访客</th><th>出口 IP</th><th>国家/地区</th><th>来源</th><th>设备/浏览器</th>
                 <th>浏览页数</th><th>前台停留</th><th>简历</th><th>联系</th>
               </tr>
             </thead>

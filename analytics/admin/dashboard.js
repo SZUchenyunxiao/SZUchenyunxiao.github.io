@@ -214,6 +214,7 @@ function renderSessions(data) {
     .map(
       (session) => `<tr data-id="${escapeHtml(session.sessionId)}">
         <td>${escapeHtml(new Date(session.startedAt).toLocaleString())}</td>
+        <td><code class="visitor-id" title="${escapeHtml(session.visitorId)}">${escapeHtml(shortVisitorId(session.visitorId))}</code></td>
         <td>${escapeHtml(session.ip || '—')}</td>
         <td>${escapeHtml(session.country || '—')}</td>
         <td>${escapeHtml(session.referrerType === 'unknown' ? '直接访问或来源未知' : session.referrerType)}</td>
@@ -235,6 +236,10 @@ function renderSessions(data) {
       }
     })
   })
+}
+
+function shortVisitorId(value) {
+  return value ? `访客 ${String(value).slice(0, 8)}` : '—'
 }
 
 function renderSessionDetail(detail) {

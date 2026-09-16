@@ -20,6 +20,7 @@ let currentPath = location.pathname
 let currentProject: string | null = null
 let lastPageViewKey = ''
 let lastPageViewAt = 0
+const pendingPixels = new Set<HTMLImageElement>()
 
 // ---- 标识管理 ----
 
@@ -59,7 +60,7 @@ function touchSession() {
 
 function send(body: Record<string, unknown>, useBeacon = false) {
   if (!cfg?.endpoint) return
-  const payload = JSON.stringify({
+  const event = {
     visitorId,
     sessionId,
     referrer: document.referrer || undefined,
@@ -67,20 +68,43 @@ function send(body: Record<string, unknown>, useBeacon = false) {
     ts: Date.now(),
     dedupKey: crypto.randomUUID(), // 每次事件唯一；离开补报时可复用避免重复
     ...body,
-  })
+  }
+  const payload = JSON.stringify(event)
   // 离开页面时用 sendBeacon，保证请求能发出去
   if (useBeacon && navigator.sendBeacon) {
-    navigator.sendBeacon(cfg.endpoint, payload)
-    return
+    if (navigator.sendBeacon(cfg.endpoint, payload)) return
   }
   fetch(cfg.endpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: payload,
     keepalive: true,
-  }).catch(() => {
-    /* 网络失败静默；可能造成部分遗漏，符合口径说明 */
   })
+    .then((response) => {
+      if (!response.ok) sendFallbackPixel(event)
+    })
+    .catch(() => sendFallbackPixel(event))
+}
+
+function sendFallbackPixel(event: Record<string, unknown>) {
+  try {
+    const endpoint = new URL(cfg.endpoint)
+    endpoint.pathname = endpoint.pathname.replace(/\/collect\/?$/, '/pixel.gif')
+    endpoint.search = ''
+    for (const [key, value] of Object.entries(event)) {
+      if (value !== undefined && value !== null) endpoint.searchParams.set(key, String(value))
+    }
+
+    const pixel = new Image(1, 1)
+    pixel.referrerPolicy = 'strict-origin-when-cross-origin'
+    const cleanup = () => pendingPixels.delete(pixel)
+    pixel.addEventListener('load', cleanup, { once: true })
+    pixel.addEventListener('error', cleanup, { once: true })
+    pendingPixels.add(pixel)
+    pixel.src = endpoint.toString()
+  } catch {
+    // The primary request already failed; analytics should never block the site.
+  }
 }
 
 // ---- 对外 API ----
