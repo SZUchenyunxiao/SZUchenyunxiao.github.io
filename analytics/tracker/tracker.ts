@@ -3,13 +3,14 @@
 // 设计要点见 README「五、数据采集流程」。
 
 interface TrackerConfig {
-  endpoint: string // 统计服务地址，如 https://portfolio-analytics.xxx.workers.dev/api/collect
+  endpoint: string // 统计服务地址，如 https://portfolio-analytics.<account>.workers.dev/api/collect
 }
 
 const SESSION_IDLE_MS = 30 * 60 * 1000
-const HEARTBEAT_MS = 15 * 1000 // 每 15s 上报一次前台停留增量
+const HEARTBEAT_MS = 30 * 1000 // 降低 Worker/D1 写入量，同时保留足够的停留精度
 
 let cfg: TrackerConfig
+let initialized = false
 let visitorId = ''
 let sessionId = ''
 let lastActive = Date.now()
@@ -17,6 +18,8 @@ let foregroundAccumMs = 0 // 自上次上报以来的前台可见时长
 let lastTick = Date.now()
 let currentPath = location.pathname
 let currentProject: string | null = null
+let lastPageViewKey = ''
+let lastPageViewAt = 0
 
 // ---- 标识管理 ----
 
@@ -44,6 +47,10 @@ function getOrCreateSessionId(): string {
 }
 
 function touchSession() {
+  if (Date.now() - lastActive >= SESSION_IDLE_MS) {
+    sessionId = crypto.randomUUID()
+    sessionStorage.setItem('an_sid', sessionId)
+  }
   lastActive = Date.now()
   sessionStorage.setItem('an_sid_ts', String(lastActive))
 }
@@ -51,6 +58,7 @@ function touchSession() {
 // ---- 上报 ----
 
 function send(body: Record<string, unknown>, useBeacon = false) {
+  if (!cfg?.endpoint) return
   const payload = JSON.stringify({
     visitorId,
     sessionId,
@@ -78,11 +86,12 @@ function send(body: Record<string, unknown>, useBeacon = false) {
 // ---- 对外 API ----
 
 export function initAnalytics(config: TrackerConfig) {
+  if (initialized || !config.endpoint) return
+  initialized = true
   cfg = config
   visitorId = getOrCreateVisitorId()
   sessionId = getOrCreateSessionId()
 
-  trackPageView(location.pathname)
   startHeartbeat()
   bindVisibility()
   bindUnload()
@@ -90,6 +99,12 @@ export function initAnalytics(config: TrackerConfig) {
 
 // 打开页面 / 进入新的项目详情 -> 一次 PV
 export function trackPageView(path: string, projectSlug?: string) {
+  if (!initialized) return
+  const now = Date.now()
+  const pageViewKey = `${path}:${projectSlug ?? ''}`
+  if (pageViewKey === lastPageViewKey && now - lastPageViewAt < 1000) return
+  lastPageViewKey = pageViewKey
+  lastPageViewAt = now
   flushForeground() // 切页前先结算上一页停留
   currentPath = path
   currentProject = projectSlug ?? null
@@ -101,6 +116,7 @@ export function trackPageView(path: string, projectSlug?: string) {
 export function trackAction(
   actionName: 'resume_download' | 'contact_email' | 'github_link',
 ) {
+  if (!initialized) return
   touchSession()
   send({
     type: 'action',

@@ -36,10 +36,10 @@ export function classifyReferrer(referrer: string | undefined, ownOrigin: string
 
 // 极简 UA 解析（落地可换成成熟库；Worker 环境偏向轻量手写）
 export function parseUserAgent(ua: string): { device: string; browser: string; os: string } {
-  const device = /Mobile|Android|iPhone/.test(ua)
-    ? 'mobile'
-    : /iPad|Tablet/.test(ua)
-      ? 'tablet'
+  const device = /iPad|Tablet/.test(ua)
+    ? 'tablet'
+    : /Mobile|Android|iPhone/.test(ua)
+      ? 'mobile'
       : 'desktop'
   const browser = /Edg/.test(ua)
     ? 'Edge'
@@ -52,12 +52,12 @@ export function parseUserAgent(ua: string): { device: string; browser: string; o
           : 'Other'
   const os = /Windows/.test(ua)
     ? 'Windows'
-    : /Mac OS/.test(ua)
-      ? 'macOS'
-      : /Android/.test(ua)
-        ? 'Android'
-        : /iPhone|iPad|iOS/.test(ua)
-          ? 'iOS'
+    : /Android/.test(ua)
+      ? 'Android'
+      : /iPhone|iPad|iOS/.test(ua)
+        ? 'iOS'
+        : /Mac OS/.test(ua)
+          ? 'macOS'
           : /Linux/.test(ua)
             ? 'Linux'
             : 'Other'

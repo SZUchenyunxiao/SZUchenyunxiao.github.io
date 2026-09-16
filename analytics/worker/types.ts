@@ -2,10 +2,11 @@
 
 export interface Env {
   DB: D1Database
+  ASSETS: Fetcher
   ALLOWED_ORIGIN: string
   ADMIN_SESSION_HOURS: string
-  ADMIN_PASSWORD_HASH: string // secret
-  JWT_SECRET: string // secret
+  ADMIN_PASSWORD_HASH: string // secret: sha256$base64url
+  SESSION_TOKEN_PEPPER: string // secret
 }
 
 // 前端埋点上报的事件（POST /api/collect）

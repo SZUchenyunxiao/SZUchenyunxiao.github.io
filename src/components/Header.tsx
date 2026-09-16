@@ -1,6 +1,7 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { site } from '../data/site'
 import { scrollToId } from '../utils/scroll'
+import { trackAction } from '../../analytics/tracker/tracker'
 
 const sections = [
   { id: 'work', label: 'Work' },
@@ -43,8 +44,8 @@ export function Header() {
               {section.label}
             </button>
           ))}
-          <a href={site.github} target="_blank" rel="noreferrer">GitHub ↗</a>
-          <a className="nav-cta" href={`mailto:${site.email}`}>Contact</a>
+          <a href={site.github} target="_blank" rel="noreferrer" onClick={() => trackAction('github_link')}>GitHub ↗</a>
+          <a className="nav-cta" href={`mailto:${site.email}`} onClick={() => trackAction('contact_email')}>Contact</a>
         </nav>
       </div>
     </header>

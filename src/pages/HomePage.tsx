@@ -6,6 +6,7 @@ import { featuredProjects, projects } from '../data/projects'
 import { site } from '../data/site'
 import { handleAnchorClick } from '../utils/scroll'
 import { renderBold } from '../utils/richText'
+import { trackAction } from '../../analytics/tracker/tracker'
 
 // 首页 hero 的真实 3DGS 场景，懒加载
 const GaussianViewer = lazy(() =>
@@ -14,7 +15,10 @@ const GaussianViewer = lazy(() =>
 
 export function HomePage() {
   const analyticsAdminUrl =
-    import.meta.env.VITE_ANALYTICS_ADMIN_URL ?? 'http://127.0.0.1:8787/'
+    import.meta.env.VITE_ANALYTICS_ADMIN_URL ||
+    (import.meta.env.PROD
+      ? 'https://portfolio-analytics.szuchenyunxiao.workers.dev/'
+      : 'http://127.0.0.1:8787/')
 
   return (
     <>
@@ -29,10 +33,10 @@ export function HomePage() {
             <p className="cover-role">{site.role}</p>
             <p className="cover-role-zh">{site.introZh}</p>
             <div className="cover-socials">
-              <a href={`mailto:${site.email}`} aria-label="Email" title={site.email}>
+              <a href={`mailto:${site.email}`} aria-label="Email" title={site.email} onClick={() => trackAction('contact_email')}>
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>
               </a>
-              <a href={site.github} target="_blank" rel="noreferrer" aria-label="GitHub" title="GitHub">
+              <a href={site.github} target="_blank" rel="noreferrer" aria-label="GitHub" title="GitHub" onClick={() => trackAction('github_link')}>
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.72-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.55-1.14-4.55-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.27 2.75 1.05a9.36 9.36 0 0 1 5 0c1.91-1.32 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z" /></svg>
               </a>
               <a href={`tel:${site.phone.replace(/-/g, '')}`} aria-label="Phone" title={site.phone}>
@@ -57,7 +61,7 @@ export function HomePage() {
             <p className="hero-intro-zh">{site.introZh}</p>
             <div className="hero-actions">
               <a className="button primary" href="#work" onClick={handleAnchorClick('work')}>Explore work</a>
-              <a className="button secondary" href={site.resume}>Resume ↗</a>
+              <a className="button secondary" href={site.resume} onClick={() => trackAction('resume_download')}>Resume ↗</a>
             </div>
             <div className="hero-stats">
               <div><strong>0.023 mm</strong><span>结构光扫描球心距精度</span></div>
@@ -185,14 +189,14 @@ export function HomePage() {
 
         <section className="contact-section container">
           <p>Looking for a 3D reconstruction / 3D vision engineer?</p>
-          <a href={`mailto:${site.email}`}>Let&apos;s talk <span>↗</span></a>
+          <a href={`mailto:${site.email}`} onClick={() => trackAction('contact_email')}>Let&apos;s talk <span>↗</span></a>
         </section>
       </main>
       <footer className="footer container">
         <span>© 2026 {site.name} · {site.email}</span>
         <span>Built with React · Three.js · GitHub Pages</span>
       </footer>
-      {import.meta.env.DEV && (
+      {analyticsAdminUrl && (
         <a
           className="analytics-float"
           href={analyticsAdminUrl}

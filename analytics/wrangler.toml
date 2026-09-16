@@ -1,19 +1,29 @@
 name = "portfolio-analytics"
 main = "worker/index.ts"
-compatibility_date = "2026-01-01"
+compatibility_date = "2026-09-16"
+
+# 同一个 Worker 托管后台静态页面和 API。API 路由优先进入 Worker，
+# 其余请求由 ASSETS binding 返回 admin/ 下的文件。
+[assets]
+directory = "./admin"
+binding = "ASSETS"
+run_worker_first = true
 
 # D1 数据库绑定；database_id 由 `wrangler d1 create` 生成后填入
 [[d1_databases]]
 binding = "DB"
 database_name = "portfolio-analytics"
-database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+database_id = "b615b352-282e-498c-9b2a-49b81e1f9701"
 
 [vars]
 # 允许写入事件的来源（主站域名），防止他人乱调采集接口
-ALLOWED_ORIGIN = "https://YOUR_USERNAME.github.io"
+ALLOWED_ORIGIN = "https://szuchenyunxiao.github.io"
 # 后台会话有效期（小时）
 ADMIN_SESSION_HOURS = "12"
 
+[triggers]
+crons = ["17 3 * * *"]
+
 # 敏感信息用 `wrangler secret put` 设置，不写进本文件：
-#   ADMIN_PASSWORD_HASH   管理员密码哈希
-#   JWT_SECRET            签发后台会话 token 的密钥
+#   ADMIN_PASSWORD_HASH    SHA-256 密码摘要（npm run password:hash 生成）
+#   SESSION_TOKEN_PEPPER   会话 token 服务端密钥（建议 32 字节随机值）

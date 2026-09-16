@@ -4,4 +4,5 @@ dist
 *.local
 analytics/admin/local-config.local.js
 analytics/.dev.vars
+analytics/.wrangler/
 *.tsbuildinfo

@@ -54,7 +54,7 @@
       <table id="session-table">
         <thead>
           <tr>
-            <th>开始时间</th><th>出口 IP</th><th>来源</th><th>设备/浏览器</th>
+            <th>开始时间</th><th>出口 IP</th><th>国家/地区</th><th>来源</th><th>设备/浏览器</th>
             <th>浏览页数</th><th>前台停留</th><th>简历</th><th>联系</th>
           </tr>
         </thead>
@@ -64,13 +64,6 @@
       <div id="session-detail" class="drawer hidden"></div>
     </section>
 
-    <script type="module">
-      try {
-        await import('./local-config.local.js')
-      } catch {
-        // Local-only password config is intentionally absent in deployments.
-      }
-      await import('./dashboard.js')
-    </script>
+    <script type="module" src="./bootstrap.js"></script>
   </body>
 </html>
