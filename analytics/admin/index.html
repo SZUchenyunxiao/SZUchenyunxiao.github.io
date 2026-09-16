@@ -23,11 +23,13 @@
       <header class="topbar">
         <strong>Portfolio Analytics</strong>
         <div class="range-picker">
-          <button data-range="7">最近 7 天</button>
+          <span id="last-updated" class="sync-status" aria-live="polite">等待刷新</span>
+          <button data-range="7" class="active">最近 7 天</button>
           <button data-range="30">最近 30 天</button>
           <input type="date" id="from-date" />
           <input type="date" id="to-date" />
           <button id="apply-range">应用</button>
+          <button id="refresh-data" title="刷新最新数据">刷新</button>
           <button id="logout">退出</button>
         </div>
       </header>
@@ -36,34 +38,100 @@
       <div class="cards" id="overview-cards">
         <!-- PV / UV / 会话 / 平均停留 / 简历点击 / 邮箱点击 -->
       </div>
-      <div class="chart"><canvas id="trend-chart"></canvas></div>
+
+      <main class="dashboard-content">
+        <section class="chart-card chart-card--wide">
+          <div class="chart-heading">
+            <div>
+              <span class="eyebrow">TRAFFIC</span>
+              <h2>访问趋势</h2>
+            </div>
+            <span class="chart-note">页面浏览量与独立访客</span>
+          </div>
+          <div class="chart-canvas chart-canvas--trend">
+            <canvas id="trend-chart" aria-label="访问趋势折线图" role="img"></canvas>
+            <p class="chart-empty hidden">当前时间范围暂无趋势数据</p>
+          </div>
+        </section>
+
+        <div class="chart-grid">
+          <section class="chart-card">
+            <div class="chart-heading">
+              <div>
+                <span class="eyebrow">ACQUISITION</span>
+                <h2>访问来源</h2>
+              </div>
+            </div>
+            <div class="chart-canvas chart-canvas--donut">
+              <canvas id="source-chart" aria-label="访问来源环形图" role="img"></canvas>
+              <p class="chart-empty hidden">暂无来源数据</p>
+            </div>
+          </section>
+
+          <section class="chart-card">
+            <div class="chart-heading">
+              <div>
+                <span class="eyebrow">AUDIENCE</span>
+                <h2>设备分布</h2>
+              </div>
+            </div>
+            <div class="chart-canvas chart-canvas--donut">
+              <canvas id="device-chart" aria-label="设备分布环形图" role="img"></canvas>
+              <p class="chart-empty hidden">暂无设备数据</p>
+            </div>
+          </section>
+        </div>
+
+        <section class="chart-card chart-card--wide">
+          <div class="chart-heading">
+            <div>
+              <span class="eyebrow">CONTENT</span>
+              <h2>项目热度</h2>
+            </div>
+            <span class="chart-note">浏览量与访客数对比</span>
+          </div>
+          <div class="chart-canvas chart-canvas--projects">
+            <canvas id="project-chart" aria-label="项目热度柱状图" role="img"></canvas>
+            <p class="chart-empty hidden">当前时间范围暂无项目访问数据</p>
+          </div>
+        </section>
+      </main>
 
       <!-- 2. 项目分析 -->
-      <h2>项目分析</h2>
-      <table id="project-table">
-        <thead>
-          <tr>
-            <th>项目</th><th>浏览量</th><th>访客数</th><th>平均前台停留</th><th>简历点击</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+      <section class="table-section">
+        <h2>项目分析</h2>
+        <div class="table-shell">
+          <table id="project-table">
+            <thead>
+              <tr>
+                <th>项目</th><th>浏览量</th><th>访客数</th><th>平均前台停留</th><th>简历点击</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
 
       <!-- 3. 访问明细 -->
-      <h2>访问明细</h2>
-      <table id="session-table">
-        <thead>
-          <tr>
-            <th>开始时间</th><th>出口 IP</th><th>国家/地区</th><th>来源</th><th>设备/浏览器</th>
-            <th>浏览页数</th><th>前台停留</th><th>简历</th><th>联系</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+      <section class="table-section">
+        <h2>访问明细</h2>
+        <div class="table-shell">
+          <table id="session-table">
+            <thead>
+              <tr>
+                <th>开始时间</th><th>出口 IP</th><th>国家/地区</th><th>来源</th><th>设备/浏览器</th>
+                <th>浏览页数</th><th>前台停留</th><th>简历</th><th>联系</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
       <!-- 点击某行 -> 弹出该会话页面浏览顺序与关键操作 -->
       <div id="session-detail" class="drawer hidden"></div>
     </section>
 
+    <script src="./vendor/chart.umd.min.js"></script>
     <script type="module" src="./bootstrap.js"></script>
   </body>
 </html>

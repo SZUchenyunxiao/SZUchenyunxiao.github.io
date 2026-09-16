@@ -15,8 +15,14 @@ interface TrendRow {
   visitors: number
 }
 
+interface BreakdownRow {
+  dimension: 'source' | 'device' | 'browser' | 'country'
+  label: string
+  value: number
+}
+
 export async function computeOverview(env: Env, query: RangeQuery): Promise<OverviewMetrics> {
-  const row = await env.DB.prepare(
+  const overviewStatement = env.DB.prepare(
     `WITH filtered AS (
        SELECT e.*
        FROM events e
@@ -35,11 +41,9 @@ export async function computeOverview(env: Env, query: RangeQuery): Promise<Over
        COALESCE(SUM(CASE WHEN type = 'action' AND action_name = 'resume_download' THEN 1 ELSE 0 END), 0) AS resume_clicks,
        COALESCE(SUM(CASE WHEN type = 'action' AND action_name = 'contact_email' THEN 1 ELSE 0 END), 0) AS contact_clicks
      FROM filtered`,
-  )
-    .bind(query.from, query.to)
-    .first<OverviewRow>()
+  ).bind(query.from, query.to)
 
-  const trend = await env.DB.prepare(
+  const trendStatement = env.DB.prepare(
     `SELECT
        date(e.created_at / 1000, 'unixepoch', '+8 hours') AS day,
        SUM(CASE WHEN e.type = 'page_view' THEN 1 ELSE 0 END) AS page_views,
@@ -49,9 +53,47 @@ export async function computeOverview(env: Env, query: RangeQuery): Promise<Over
      WHERE e.created_at BETWEEN ? AND ? AND s.is_excluded = 0
      GROUP BY day
      ORDER BY day ASC`,
-  )
-    .bind(query.from, query.to)
-    .all<TrendRow>()
+  ).bind(query.from, query.to)
+
+  const breakdownStatement = env.DB.prepare(
+    `WITH filtered_sessions AS (
+       SELECT referrer_type, device_type, browser, country
+       FROM sessions
+       WHERE started_at BETWEEN ? AND ? AND is_excluded = 0
+     )
+     SELECT 'source' AS dimension,
+            COALESCE(NULLIF(referrer_type, ''), 'unknown') AS label,
+            COUNT(*) AS value
+     FROM filtered_sessions GROUP BY label
+     UNION ALL
+     SELECT 'device' AS dimension,
+            COALESCE(NULLIF(device_type, ''), 'unknown') AS label,
+            COUNT(*) AS value
+     FROM filtered_sessions GROUP BY label
+     UNION ALL
+     SELECT 'browser' AS dimension,
+            COALESCE(NULLIF(browser, ''), 'unknown') AS label,
+            COUNT(*) AS value
+     FROM filtered_sessions GROUP BY label
+     UNION ALL
+     SELECT 'country' AS dimension,
+            COALESCE(NULLIF(country, ''), 'unknown') AS label,
+            COUNT(*) AS value
+     FROM filtered_sessions GROUP BY label
+     ORDER BY dimension ASC, value DESC, label ASC`,
+  ).bind(query.from, query.to)
+
+  const [row, trend, breakdown] = await Promise.all([
+    overviewStatement.first<OverviewRow>(),
+    trendStatement.all<TrendRow>(),
+    breakdownStatement.all<BreakdownRow>(),
+  ])
+
+  const selectBreakdown = (dimension: BreakdownRow['dimension']) =>
+    breakdown.results
+      .filter((item) => item.dimension === dimension)
+      .slice(0, 8)
+      .map((item) => ({ label: item.label, value: toNumber(item.value) }))
 
   return {
     pageViews: toNumber(row?.page_views),
@@ -65,6 +107,12 @@ export async function computeOverview(env: Env, query: RangeQuery): Promise<Over
       pageViews: toNumber(item.page_views),
       visitors: toNumber(item.visitors),
     })),
+    breakdowns: {
+      sources: selectBreakdown('source'),
+      devices: selectBreakdown('device'),
+      browsers: selectBreakdown('browser'),
+      countries: selectBreakdown('country'),
+    },
   }
 }
 

@@ -40,4 +40,10 @@ export interface OverviewMetrics {
   resumeClicks: number
   contactClicks: number
   dailyTrend: { day: string; pageViews: number; visitors: number }[]
+  breakdowns: {
+    sources: { label: string; value: number }[]
+    devices: { label: string; value: number }[]
+    browsers: { label: string; value: number }[]
+    countries: { label: string; value: number }[]
+  }
 }
