@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:analytics": "vite analytics/admin --host 127.0.0.1 --port 8787 --strictPort",
     "build": "tsc -b && vite build",
     "preview": "vite preview"
   },

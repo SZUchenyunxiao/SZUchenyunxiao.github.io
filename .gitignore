@@ -2,4 +2,6 @@ node_modules
 dist
 .DS_Store
 *.local
+analytics/admin/local-config.local.js
+analytics/.dev.vars
 *.tsbuildinfo

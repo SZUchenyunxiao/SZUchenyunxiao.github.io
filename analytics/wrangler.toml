@@ -1,0 +1,19 @@
+name = "portfolio-analytics"
+main = "worker/index.ts"
+compatibility_date = "2026-01-01"
+
+# D1 数据库绑定；database_id 由 `wrangler d1 create` 生成后填入
+[[d1_databases]]
+binding = "DB"
+database_name = "portfolio-analytics"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+
+[vars]
+# 允许写入事件的来源（主站域名），防止他人乱调采集接口
+ALLOWED_ORIGIN = "https://YOUR_USERNAME.github.io"
+# 后台会话有效期（小时）
+ADMIN_SESSION_HOURS = "12"
+
+# 敏感信息用 `wrangler secret put` 设置，不写进本文件：
+#   ADMIN_PASSWORD_HASH   管理员密码哈希
+#   JWT_SECRET            签发后台会话 token 的密钥

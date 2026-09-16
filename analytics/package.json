@@ -1,0 +1,18 @@
+{
+  "name": "portfolio-analytics",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Cloudflare Workers + D1 访问统计服务与管理后台",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:init": "wrangler d1 execute portfolio-analytics --file=./schema/0001_init.sql",
+    "db:init:local": "wrangler d1 execute portfolio-analytics --local --file=./schema/0001_init.sql"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.0.0",
+    "typescript": "^5.5.0",
+    "wrangler": "^3.80.0"
+  }
+}

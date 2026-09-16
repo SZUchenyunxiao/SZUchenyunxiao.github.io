@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Analytics · Admin</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <!-- 登录视图：数据保护靠鉴权，这里只是入口 -->
+    <section id="login-view" class="view">
+      <form id="login-form" class="login-card">
+        <h1>Analytics Access</h1>
+        <input id="password" type="password" placeholder="Password" autocomplete="current-password" autofocus />
+        <button type="submit">Continue</button>
+        <p id="login-error" class="error"></p>
+      </form>
+    </section>
+
+    <!-- 仪表盘视图 -->
+    <section id="dashboard-view" class="view hidden">
+      <header class="topbar">
+        <strong>Portfolio Analytics</strong>
+        <div class="range-picker">
+          <button data-range="7">最近 7 天</button>
+          <button data-range="30">最近 30 天</button>
+          <input type="date" id="from-date" />
+          <input type="date" id="to-date" />
+          <button id="apply-range">应用</button>
+          <button id="logout">退出</button>
+        </div>
+      </header>
+
+      <!-- 1. 数据概览 -->
+      <div class="cards" id="overview-cards">
+        <!-- PV / UV / 会话 / 平均停留 / 简历点击 / 邮箱点击 -->
+      </div>
+      <div class="chart"><canvas id="trend-chart"></canvas></div>
+
+      <!-- 2. 项目分析 -->
+      <h2>项目分析</h2>
+      <table id="project-table">
+        <thead>
+          <tr>
+            <th>项目</th><th>浏览量</th><th>访客数</th><th>平均前台停留</th><th>简历点击</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <!-- 3. 访问明细 -->
+      <h2>访问明细</h2>
+      <table id="session-table">
+        <thead>
+          <tr>
+            <th>开始时间</th><th>出口 IP</th><th>来源</th><th>设备/浏览器</th>
+            <th>浏览页数</th><th>前台停留</th><th>简历</th><th>联系</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <!-- 点击某行 -> 弹出该会话页面浏览顺序与关键操作 -->
+      <div id="session-detail" class="drawer hidden"></div>
+    </section>
+
+    <script type="module">
+      try {
+        await import('./local-config.local.js')
+      } catch {
+        // Local-only password config is intentionally absent in deployments.
+      }
+      await import('./dashboard.js')
+    </script>
+  </body>
+</html>
