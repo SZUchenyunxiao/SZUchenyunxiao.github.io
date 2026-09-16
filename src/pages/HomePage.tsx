@@ -13,6 +13,9 @@ const GaussianViewer = lazy(() =>
 )
 
 export function HomePage() {
+  const analyticsAdminUrl =
+    import.meta.env.VITE_ANALYTICS_ADMIN_URL ?? 'http://127.0.0.1:8787/'
+
   return (
     <>
       <Header />
@@ -189,6 +192,22 @@ export function HomePage() {
         <span>© 2026 {site.name} · {site.email}</span>
         <span>Built with React · Three.js · GitHub Pages</span>
       </footer>
+      {import.meta.env.DEV && (
+        <a
+          className="analytics-float"
+          href={analyticsAdminUrl}
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Open local analytics"
+          title="Open local analytics"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <path d="M5 19V11M12 19V5M19 19v-8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+            <path d="M3 19.5h18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+          </svg>
+          <span>Analytics</span>
+        </a>
+      )}
     </>
   )
 }
