@@ -4,14 +4,14 @@ export const site = {
   role: '3D Reconstruction & Spatial Intelligence',
   intro:
     'I build geometry pipelines that turn images, point clouds and Gaussian representations into measurable 3D results.',
-  introZh: '测绘工程本硕 · 三维视觉 / 点云智能处理 / 3D Gaussian Splatting / 空间智能',
+  introZh: '测绘与计算机视觉交叉背景 · 三维视觉 / 点云智能处理 / 3D Gaussian Splatting / 空间智能',
   phone: '158-5568-2789',
   email: '1370214582@qq.com',
   github: 'https://github.com/SZUchenyunxiao',
   resume: './assets/Chen-Yunxiao-Resume.pdf',
 
   aboutZh:
-    '测绘工程本硕背景，研究方向聚焦三维视觉、3D Gaussian Splatting（3DGS）与空间智能。曾任其域创新科技有限公司三维重建算法实习生，参与小物体重建后处理、结构光扫描、3DGS 碰撞仿真及 3D 打印切片等模块研发，具备从算法验证到工程实现的完整项目经验。以第一作者身份投稿 NeurIPS 2026（在审），获 CVPR 2025 Workshop Building3D Competition 全球第 3 名。',
+    '具备测绘与计算机视觉交叉背景，研究方向聚焦三维视觉、3D Gaussian Splatting（3DGS）与空间智能。曾任其域创新科技有限公司三维重建算法实习生，参与小物体重建后处理、结构光扫描、3DGS 碰撞仿真及 3D 打印切片等模块研发，具备从算法验证到工程实现的完整项目经验。以第一作者身份投稿 NeurIPS 2026（在审），获 CVPR 2025 Workshop Building3D Competition 全球第 3 名。',
 
   intent: {
     role: '三维重建算法工程师（3D 视觉 / 测绘 / 空间智能方向）',
