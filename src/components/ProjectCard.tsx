@@ -6,13 +6,20 @@ import { ModelViewer } from '../three/ModelViewer'
 export function ProjectCard({ project }: { project: Project }) {
   return (
     <article className="project-card">
-      <div className="project-visual" aria-label={`${project.title} interactive preview`}>
-        {project.model ? (
+      <div className="project-visual" aria-label={`${project.title} project preview`}>
+        {project.cover ? (
+          <img
+            className="project-cover"
+            src={project.cover}
+            alt={`${project.title} project overview`}
+            loading="lazy"
+          />
+        ) : project.model ? (
           <ModelViewer demoType={project.demoType} src={project.model} />
         ) : (
           <MiniScene variant={project.demoType} />
         )}
-        <span className="demo-badge">Interactive preview</span>
+        {!project.cover && <span className="demo-badge">Interactive preview</span>}
       </div>
       <div className="project-body">
         <div className="project-card-topline">

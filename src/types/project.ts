@@ -32,7 +32,10 @@ export interface Project {
     demo?: string
   }
   model?: string
+  /** 首页项目卡片使用的静态总览图 */
   cover?: string
+  /** 项目详情页首屏使用的静态结果图 */
+  detailCover?: string
   /** 详情页额外展示的图片或视频 */
   gallery?: {
     src: string

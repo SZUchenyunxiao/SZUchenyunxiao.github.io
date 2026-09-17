@@ -37,7 +37,13 @@ export function ProjectPage() {
             <div className="tag-row">{project.tags.map((tag) => <span className="tag" key={tag}>{tag}</span>)}</div>
           </div>
           <div className="project-demo-large">
-            {project.model ? (
+            {project.detailCover ? (
+              <img
+                className="project-detail-cover"
+                src={project.detailCover}
+                alt={`${project.title} panorama, depth, normal and detail results`}
+              />
+            ) : project.model ? (
               <ModelViewer demoType={project.demoType} src={project.model} />
             ) : (
               <>

@@ -182,6 +182,8 @@ export const projects: Project[] = [
       { value: '8K', label: '8000 × 4000 depth' },
     ],
     demoType: 'pointcloud',
+    cover: './assets/images/panohk360-overview.png',
+    detailCover: './assets/images/panohk360-depth-normal-details.png',
     overview: [
       'Depth estimation models are only as good as the data they learn from, and large-scale, metrically accurate outdoor RGB-D data is scarce — especially for **360° panoramas**, where existing datasets are small or synthetic.',
       'PanoHK360 addresses that gap: a **city-scale, real-world 8K panoramic RGB-D dataset** built by fusing vehicle-mounted panoramas with airborne LiDAR across Hong Kong. This work is the foundation of my **first-author NeurIPS 2026 submission** and required solving both a cross-modal geometry problem and a data-engineering problem at the terabyte scale.',
