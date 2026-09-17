@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import * as GaussianSplats3D from '@mkkellogg/gaussian-splats-3d'
+import { useRenderVisibility } from '../hooks/useRenderVisibility'
 
 interface Props {
   /** 相对 index.html 的模型路径，如 ./assets/models/scene.ply / .splat / .ksplat */
@@ -12,7 +13,9 @@ interface Props {
  * 直接挂到一个 div 容器上，并在卸载时彻底清理，避免内存泄漏。
  */
 export function GaussianViewer({ src }: Props) {
-  const containerRef = useRef<HTMLDivElement>(null)
+  const { targetRef: containerRef, renderActive } = useRenderVisibility<HTMLDivElement>()
+  const renderActiveRef = useRef(renderActive)
+  renderActiveRef.current = renderActive
   const runtimeRef = useRef<{
     viewer: InstanceType<typeof GaussianSplats3D.Viewer>
     container: HTMLDivElement
@@ -132,7 +135,7 @@ export function GaussianViewer({ src }: Props) {
           return
         }
         setStatus('ready')
-        viewer.start()
+        if (renderActiveRef.current) viewer.start()
       })
       .catch((err: unknown) => {
         runtime.loadSettled = true
@@ -145,6 +148,14 @@ export function GaussianViewer({ src }: Props) {
 
     return () => scheduleDispose(runtime)
   }, [src])
+
+  useEffect(() => {
+    const runtime = runtimeRef.current
+    if (!runtime || !runtime.loadSettled || runtime.cancelled || runtime.disposed) return
+
+    if (renderActive) runtime.viewer.start()
+    else runtime.viewer.stop()
+  }, [renderActive])
 
   return (
     <div className="gaussian-viewer">

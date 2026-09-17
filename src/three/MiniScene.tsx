@@ -3,6 +3,7 @@ import { OrbitControls } from '@react-three/drei'
 import { useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import type { DemoType } from '../types/project'
+import { useRenderVisibility } from '../hooks/useRenderVisibility'
 
 function PointCloud() {
   const ref = useRef<THREE.Points>(null)
@@ -91,15 +92,23 @@ function Building() {
 }
 
 export function MiniScene({ variant }: { variant: DemoType }) {
+  const { targetRef, renderActive } = useRenderVisibility<HTMLDivElement>()
+
   return (
-    <Canvas camera={{ position: [2.8, 2.1, 3.2], fov: 42 }} dpr={[1, 1.5]}>
-      <ambientLight intensity={1.4} />
-      <directionalLight position={[3, 4, 5]} intensity={2.2} />
-      {variant === 'mesh' && <MeshObject />}
-      {variant === 'pointcloud' && <PointCloud />}
-      {variant === 'gaussian' && <GaussianCloud />}
-      {variant === 'building' && <Building />}
-      <OrbitControls enablePan={false} minDistance={2.2} maxDistance={6} autoRotate autoRotateSpeed={0.35} />
-    </Canvas>
+    <div ref={targetRef} className="render-viewport">
+      <Canvas
+        camera={{ position: [2.8, 2.1, 3.2], fov: 42 }}
+        dpr={[1, 1.5]}
+        frameloop={renderActive ? 'always' : 'never'}
+      >
+        <ambientLight intensity={1.4} />
+        <directionalLight position={[3, 4, 5]} intensity={2.2} />
+        {variant === 'mesh' && <MeshObject />}
+        {variant === 'pointcloud' && <PointCloud />}
+        {variant === 'gaussian' && <GaussianCloud />}
+        {variant === 'building' && <Building />}
+        <OrbitControls enablePan={false} minDistance={2.2} maxDistance={6} autoRotate autoRotateSpeed={0.35} />
+      </Canvas>
+    </div>
   )
 }

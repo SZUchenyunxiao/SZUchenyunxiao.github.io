@@ -3,6 +3,7 @@ import { OrbitControls, Bounds } from '@react-three/drei'
 import { Suspense, useMemo } from 'react'
 import * as THREE from 'three'
 import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader.js'
+import { useRenderVisibility } from '../hooks/useRenderVisibility'
 
 interface Props {
   /** 相对 index.html 的点云路径，如 ./assets/models/scan.ply */
@@ -63,14 +64,22 @@ function PointCloud({ src, color = '#0071e3', pointSize = 1, flipY = true }: Pro
 }
 
 export function PointCloudViewer(props: Props) {
+  const { targetRef, renderActive } = useRenderVisibility<HTMLDivElement>()
+
   return (
-    <Canvas camera={{ position: [1.8, 1.4, 2.2], fov: 45 }} dpr={[1, 1.5]}>
-      <Suspense fallback={null}>
-        <Bounds fit clip observe margin={1.2}>
-          <PointCloud {...props} />
-        </Bounds>
-      </Suspense>
-      <OrbitControls enablePan={false} autoRotate autoRotateSpeed={0.4} makeDefault />
-    </Canvas>
+    <div ref={targetRef} className="render-viewport">
+      <Canvas
+        camera={{ position: [1.8, 1.4, 2.2], fov: 45 }}
+        dpr={[1, 1.5]}
+        frameloop={renderActive ? 'always' : 'never'}
+      >
+        <Suspense fallback={null}>
+          <Bounds fit clip observe margin={1.2}>
+            <PointCloud {...props} />
+          </Bounds>
+        </Suspense>
+        <OrbitControls enablePan={false} autoRotate autoRotateSpeed={0.4} makeDefault />
+      </Canvas>
+    </div>
   )
 }

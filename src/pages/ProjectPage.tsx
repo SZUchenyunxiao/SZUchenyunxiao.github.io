@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { Header } from '../components/Header'
+import { VisitCounter } from '../components/VisitCounter'
 import { projects } from '../data/projects'
 import { MiniScene } from '../three/MiniScene'
 import { ModelViewer } from '../three/ModelViewer'
@@ -138,7 +139,10 @@ export function ProjectPage() {
           })()}
         </section>
       </main>
-      <footer className="footer container"><span>© 2026 Chen Yunxiao</span><Link to="/">Back home ↑</Link></footer>
+      <footer className="footer container">
+        <span>© 2026 Chen Yunxiao</span>
+        <span className="footer-meta"><VisitCounter /><Link to="/">Back home ↑</Link></span>
+      </footer>
     </>
   )
 }

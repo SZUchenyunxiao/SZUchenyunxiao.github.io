@@ -2,6 +2,7 @@ import { Suspense, lazy } from 'react'
 import { Header } from '../components/Header'
 import { ProjectCard } from '../components/ProjectCard'
 import { SectionHeading } from '../components/SectionHeading'
+import { VisitCounter } from '../components/VisitCounter'
 import { featuredProjects, projects } from '../data/projects'
 import { site } from '../data/site'
 import { handleAnchorClick } from '../utils/scroll'
@@ -194,7 +195,10 @@ export function HomePage() {
       </main>
       <footer className="footer container">
         <span>© 2026 {site.name} · {site.email}</span>
-        <span>Built with React · Three.js · GitHub Pages</span>
+        <span className="footer-meta">
+          <VisitCounter />
+          <span>Built with React · Three.js · GitHub Pages</span>
+        </span>
       </footer>
       {analyticsAdminUrl && (
         <a

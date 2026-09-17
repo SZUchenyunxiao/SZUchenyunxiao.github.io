@@ -4,6 +4,7 @@ import { Suspense, useMemo } from 'react'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js'
 import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader.js'
+import { useRenderVisibility } from '../hooks/useRenderVisibility'
 
 interface Props {
   /** 相对 index.html 的模型路径，如 ./assets/models/mesh.glb */
@@ -70,21 +71,29 @@ function Model({ src, wireframe }: Props) {
 }
 
 export function MeshViewer(props: Props) {
+  const { targetRef, renderActive } = useRenderVisibility<HTMLDivElement>()
+
   return (
-    <Canvas camera={{ position: [2.4, 1.8, 2.6], fov: 45 }} dpr={[1, 1.5]}>
-      {/* 纯本地灯光，不依赖任何网络 HDR 环境贴图，保证离线/国内可用 */}
-      <ambientLight intensity={0.9} />
-      <hemisphereLight intensity={0.6} groundColor="#b7bcc4" />
-      <directionalLight position={[4, 6, 5]} intensity={1.6} />
-      <directionalLight position={[-4, 2, -3]} intensity={0.5} />
-      <Suspense fallback={null}>
-        <Bounds fit clip observe margin={1.1}>
-          <Center>
-            <Model {...props} />
-          </Center>
-        </Bounds>
-      </Suspense>
-      <OrbitControls enablePan={false} autoRotate autoRotateSpeed={0.5} makeDefault />
-    </Canvas>
+    <div ref={targetRef} className="render-viewport">
+      <Canvas
+        camera={{ position: [2.4, 1.8, 2.6], fov: 45 }}
+        dpr={[1, 1.5]}
+        frameloop={renderActive ? 'always' : 'never'}
+      >
+        {/* 纯本地灯光，不依赖任何网络 HDR 环境贴图，保证离线/国内可用 */}
+        <ambientLight intensity={0.9} />
+        <hemisphereLight intensity={0.6} groundColor="#b7bcc4" />
+        <directionalLight position={[4, 6, 5]} intensity={1.6} />
+        <directionalLight position={[-4, 2, -3]} intensity={0.5} />
+        <Suspense fallback={null}>
+          <Bounds fit clip observe margin={1.1}>
+            <Center>
+              <Model {...props} />
+            </Center>
+          </Bounds>
+        </Suspense>
+        <OrbitControls enablePan={false} autoRotate autoRotateSpeed={0.5} makeDefault />
+      </Canvas>
+    </div>
   )
 }
