@@ -2,7 +2,7 @@
 
 Personal portfolio focused on 3D reconstruction, computer vision, point-cloud processing, 3D Gaussian Splatting, and spatial intelligence.
 
-**Live site:** [szuchenyunxiao.github.io](https://szuchenyunxiao.github.io/)
+**Live site:** [szucyx.github.io](https://szucyx.github.io/)
 
 ## Tech stack
 

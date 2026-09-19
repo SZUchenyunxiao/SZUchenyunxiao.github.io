@@ -17,7 +17,7 @@ database_id = "b615b352-282e-498c-9b2a-49b81e1f9701"
 
 [vars]
 # 允许写入事件的来源（主站域名），防止他人乱调采集接口
-ALLOWED_ORIGIN = "https://szuchenyunxiao.github.io"
+ALLOWED_ORIGIN = "https://szucyx.github.io"
 # 后台会话有效期（小时）
 ADMIN_SESSION_HOURS = "12"
 

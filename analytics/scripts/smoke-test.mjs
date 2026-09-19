@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto'
 
-const [baseUrl = 'http://127.0.0.1:8787', password, siteOrigin = 'https://szuchenyunxiao.github.io'] = process.argv.slice(2)
+const [baseUrl = 'http://127.0.0.1:8787', password, siteOrigin = 'https://szucyx.github.io'] = process.argv.slice(2)
 if (!password) {
   console.error('Usage: node scripts/smoke-test.mjs <worker-url> <password> [site-origin]')
   process.exit(1)

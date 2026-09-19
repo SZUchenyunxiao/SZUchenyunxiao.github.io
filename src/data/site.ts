@@ -7,7 +7,7 @@ export const site = {
   introZh: '测绘与计算机视觉交叉背景 · 三维视觉 / 点云智能处理 / 3D Gaussian Splatting / 空间智能',
   phone: '158-5568-2789',
   email: '1370214582@qq.com',
-  github: 'https://github.com/SZUchenyunxiao',
+  github: 'https://github.com/SZUcyx',
   resume: './assets/Chen-Yunxiao-Resume.pdf',
 
   aboutZh:

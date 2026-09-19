@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 const SCRIPT_SRC = 'https://events.vercount.one/js'
-const LIVE_HOST = 'szuchenyunxiao.github.io'
+const LIVE_HOST = 'szucyx.github.io'
 const CACHE_KEY = 'visitorCountData'
 
 function readCachedCount(): string {
